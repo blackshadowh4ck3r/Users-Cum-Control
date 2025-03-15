@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Captured Image</title>
+</head>
+<body>
+    <h2>Received Image</h2>
+    <img id="receivedImage" alt="Captured Image" style="max-width: 100%;">
+
+    <script>
+        const API_KEY = "$2a$10$Cg741B1FlImbg8aDE1TuUeG.0BQ4wYThRkHABt56gVhN9sRzDgRci"; 
+        const BIN_ID = "67d4b75d8a456b796675f94b"; 
+
+        async function fetchImage() {
+            try {
+                let response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+                    method: "GET",
+                    headers: {
+                        "X-Master-Key": API_KEY
+                    }
+                });
+
+                if (response.ok) {
+                    let json = await response.json();
+                    let base64Image = json.record.image;  // Get stored Base64 image
+                    document.getElementById("receivedImage").src = base64Image; // Display image
+                } else {
+                    console.error("Failed to fetch image from Jsonbin.io");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+
+        fetchImage();
+    </script>
+</body>
+</html>
